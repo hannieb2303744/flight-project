@@ -24,6 +24,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+// ======================= question-answer =====================
+document.addEventListener("DOMContentLoaded", function () {
+  const quesTitle = document.querySelectorAll(".question-title");
+  quesTitle.forEach(function(title){
+    title.addEventListener("click", function(){
+      const answer = title.nextElementSibling;
+      const arrow = title.querySelector(".question-arrow-item");
+      answer.classList.toggle("active");
+      arrow.classList.toggle("active");
+    });
+  });
+});
 // ======================= suggestion-search =====================
 const searchInput = document.querySelectorAll(".searchInput");
 

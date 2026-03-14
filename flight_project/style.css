@@ -93,7 +93,6 @@ header,
   display: none;
   flex-direction: column;
   z-index: 9999;
-  border-radius: 0.5rem;
 }
 .dropdown-menu.active {
   display: flex;
@@ -176,12 +175,10 @@ header,
 /* ============================================.why-choose-us========================================= */
 .why-choose-us {
   background-color: #e4f4f9;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #c9ced5;
 }
 
 .choose-container {
-  padding: 2rem 13rem;
+  padding: 2rem 9rem;
 }
 .choose-box,
 .icon-choose {
@@ -191,11 +188,10 @@ header,
 }
 
 .choose-box {
-  width: 12.5rem;
+  width: 13.5rem;
   border-radius: 0.5rem;
   padding: 1.5rem 1rem;
-  height: 15rem;
-  background-image: url("img/bluesky.png");
+  height: 20rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: 0.4s;
   flex-direction: column;
@@ -228,6 +224,79 @@ header,
   filter: blur(1.5);
 }
 
+/* ============================================.discover========================================= */
+.discover {
+  background-color: #e4f4f9;
+  padding: 1rem 9rem;
+  border-bottom: 1px solid #c9ced5;
+}
+.discover-box {
+  background-image: url("https://i.pinimg.com/1200x/8d/be/98/8dbe9859511d3eeb1356858e93fb099b.jpg");
+  background-position: top;
+  background-repeat: no-repeat;
+  height: 21rem;
+  background-size: cover;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding-left: 6rem;
+  padding-top: 7rem;
+}
+
+.discover-box > h3 {
+  color: #003f6d;
+}
+
+.btn-discover {
+  width: fit-content;
+  background-color: #005b96;
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  color: #cfecf7;
+}
+
+.btn-discover:hover {
+  background-color: #cfecf7;
+  transition: 0.4s;
+  border: 0.1rem solid #cfecf7;
+  color: #005b96;
+}
+
+/* ============================================.question========================================= */
+.question {
+  background-color: #e4f4f9;
+  padding: 1rem 9rem;
+  border-bottom: 1px solid #c9ced5;
+}
+.question-box {
+}
+
+.question-item {
+  border-bottom: 1px solid #c9ced5;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 0.7rem;
+}
+
+.question-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-answer {
+  display: none;
+}
+.question-answer.active {
+  display: block;
+}
+
+.question-arrow-item.active {
+  transform: scaleY(-1);
+}
 /* ================= AUTH (LOGIN / REGISTER) ================= */
 .auth-wrapper {
   display: flex;

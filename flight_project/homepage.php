@@ -131,47 +131,124 @@ session_start();
           <div class="icon-choose">
             <i class="fa-solid fa-chart-column"></i>
           </div>
-          <h3>So sánh thông minh</h3>
+          <h3>So sánh <br />thông minh</h3>
           <small
-            >Hệ thống tự động đối chiếu giá từ nhiều hãng bay để bạn chọn được
-            mức giá tối ưu nhất.</small
+            >Hệ thống tự động tổng hợp và so sánh giá vé từ nhiều hãng hàng
+            không khác nhau, giúp bạn dễ dàng tìm ra chuyến bay phù hợp nhất với
+            mức giá tối ưu chỉ trong vài giây.</small
           >
         </div>
         <div class="choose-box">
-          <div class="icon-choose"><i class="fa-solid fa-lightbulb"></i></div>
-          <h3>Giá minh bạch</h3>
+          <div class="icon-choose">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <h3>Giá vé công khai, minh bạch</h3>
           <small
-            >Hiển thị đầy đủ thuế và phí ngay từ đầu, không phát sinh chi phí
-            ngoài dự kiến.</small
+            >Mọi thông tin về giá vé, thuế và phụ phí đều được hiển thị rõ ràng
+            ngay từ đầu. Bạn biết chính xác số tiền cần thanh toán, không có chi
+            phí ẩn hay bất ngờ vào phút cuối.</small
           >
         </div>
         <div class="choose-box">
-          <div class="icon-choose"><i class="fa-solid fa-bolt"></i></div>
-          <h3>Đặt vé nhanh chóng</h3>
+          <div class="icon-choose">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h3>
+            Đặt vé <br />
+            nhanh chóng
+          </h3>
           <small
-            >Quy trình đơn giản, tối ưu trải nghiệm giúp bạn hoàn tất đặt vé chỉ
-            trong vài phút.</small
+            >Chỉ với vài bước đơn giản, bạn có thể hoàn tất việc đặt vé trong
+            thời gian ngắn. Giao diện thân thiện giúp việc tìm chuyến bay, chọn
+            vé và thanh toán trở nên dễ dàng.</small
           >
         </div>
         <div class="choose-box">
-          <div class="icon-choose"><i class="fa-solid fa-dollar-sign"></i></div>
-          <h3>Thanh toán an toàn</h3>
+          <div class="icon-choose">
+            <i class="fa-solid fa-dollar-sign"></i>
+          </div>
+          <h3>Thanh toán <br />an toàn</h3>
           <small
-            >Ứng dụng công nghệ bảo mật hiện đại, đảm bảo mọi giao dịch luôn
-            được bảo vệ.</small
+            >Hệ thống thanh toán được bảo vệ bằng công nghệ bảo mật hiện đại,
+            đảm bảo mọi thông tin cá nhân và giao dịch của bạn luôn được giữ an
+            toàn tuyệt đối.</small
           >
         </div>
         <div class="choose-box">
-          <div class="icon-choose"><i class="fa-solid fa-tags"></i></div>
-          <h3>Ưu đãi mỗi ngày</h3>
+          <div class="icon-choose">
+            <i class="fa-solid fa-tags"></i>
+          </div>
+          <h3>Siêu ưu đãi <br />mỗi ngày</h3>
           <small
-            >Liên tục cập nhật khuyến mãi và mức giá đặc biệt từ các hãng hàng
-            không uy tín.</small
+            >Liên tục cập nhật các chương trình khuyến mãi và giá vé hấp dẫn từ
+            nhiều hãng hàng không, giúp bạn có thêm cơ hội săn được vé rẻ cho
+            mọi hành trình.</small
           >
         </div>
       </div>
     </div>
-
+    <div class="discover">
+      <div class="discover-box">
+        <h3>Bạn vẫn chưa lựa chọn được điểm đến?</h3>
+        <a href="" class="btn-discover">
+          <h2>Khám Phá Ngay</h2>
+        </a>
+      </div>
+    </div>
+<div class="question">
+  <h1>Đặt vé máy bay với CaMeoSky</h1>
+  <div class="question-box">
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-title">
+        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      </div>
+      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
+    </div>
+  </div>
+</div>
     <footer></footer>
     <script src="js.js"></script>
   </body>
