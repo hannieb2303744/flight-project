@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2026 at 03:11 AM
+-- Generation Time: Mar 16, 2026 at 05:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -98,7 +98,9 @@ INSERT INTO `don_dat_ve` (`ma_don`, `ma_dat_cho`, `ma_loai_ve`, `so_hanh_khach`,
 (5, '', 11, 0, 5000000, 'CHO_THANH_TOAN', '2026-02-21 19:50:59', 'Huy', 'huy@gmail.com', '0834448848'),
 (6, '', 18, 0, 6400000, 'DA_THANH_TOAN', '2026-02-21 19:57:23', 'Hân', 'han@gmail.com', '09746256447'),
 (7, '', 10, 0, 5000000, 'DA_THANH_TOAN', '2026-02-24 23:48:05', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
-(8, 'BK20260304031039396', 39, 1, 2900000, 'DA_THANH_TOAN', '2026-03-04 09:10:39', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920');
+(8, 'BK20260304031039396', 39, 1, 2900000, 'DA_THANH_TOAN', '2026-03-04 09:10:39', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
+(9, 'BK20260304031642573', 39, 1, 2900000, 'CHO_THANH_TOAN', '2026-03-04 09:16:42', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
+(10, 'BK20260316054027692', 43, 1, 2900000, 'CHO_THANH_TOAN', '2026-03-16 11:40:27', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920');
 
 -- --------------------------------------------------------
 
@@ -163,7 +165,9 @@ INSERT INTO `hanh_khach` (`ma_hanh_khach`, `ma_don`, `ho_ten`, `so_ho_chieu`, `n
 (9, 6, 'khach2', '098274744', NULL),
 (10, 7, 'Ngoc Han', '123', NULL),
 (11, 7, 'Nani', NULL, NULL),
-(12, 8, 'Ngoc Han', NULL, NULL);
+(12, 8, 'Ngoc Han', NULL, NULL),
+(13, 9, 'Ngoc Han', NULL, NULL),
+(14, 10, 'Ngoc Han', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -211,11 +215,11 @@ INSERT INTO `loai_ve` (`ma_loai_ve`, `ma_chuyen_bay`, `ten_loai_ve`, `gia_ve`, `
 (21, 15, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (22, 17, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (23, 19, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
-(39, 4, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 19),
+(39, 4, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 18),
 (40, 6, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (41, 8, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (42, 10, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
-(43, 12, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
+(43, 12, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 19),
 (44, 14, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (45, 16, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (46, 18, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
@@ -349,7 +353,9 @@ INSERT INTO `users` (`id`, `username`, `fullname`, `email`, `password`, `role`) 
 (5, '', 'Nguyen Thi Ngoc Han', 'hanb2303744@student.ctu.edu.vn', '$2y$10$P3YX00TgksWPFc43UVfXieqqDNxZbUJ9iZ7CGXx6kdZGUa4M9fMb2', 0),
 (6, '', 'Huynh Phuoc Thanh', 'thanh@gmail.com', '$2y$10$mOzRHB7xRhqMfzpI2CFJduBpDg.3g0ebO6thbRHqVeaqV7gxfsTSy', 0),
 (7, 'bethanhadmin', 'Huynh Phuoc Thanh', 'thanhadmin@gmail.com', '123', 1),
-(8, '', 'Nguyen Van A', 'a@gmail.com', '$2y$10$yudiZf/6MUl9guRMerQRFueXXBxeAUiAm4i6zlf50yk/VyCMKn.7u', 0);
+(8, '', 'Nguyen Van A', 'a@gmail.com', '$2y$10$yudiZf/6MUl9guRMerQRFueXXBxeAUiAm4i6zlf50yk/VyCMKn.7u', 0),
+(9, '', 'Nguyen Thi Ngoc Han', 'hanb2303@stude.ctu.edu.vn', '$2y$10$lRKc84WoDNPtSmGDIKsq1ugD/B.jO2eWKHoEkrLUnXBUXlgi.jLES', 0),
+(10, '', 'hannieng', 'han123@gmail.com', '$2y$10$Lj1YiEAjhIua.gyVWvsNUuGwWSHJminKJPQt3k9xRYCs1NZFz1uua', 0);
 
 --
 -- Indexes for dumped tables
@@ -443,7 +449,7 @@ ALTER TABLE `chuyen_bay`
 -- AUTO_INCREMENT for table `don_dat_ve`
 --
 ALTER TABLE `don_dat_ve`
-  MODIFY `ma_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ma_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `ghe`
@@ -461,7 +467,7 @@ ALTER TABLE `hang_hang_khong`
 -- AUTO_INCREMENT for table `hanh_khach`
 --
 ALTER TABLE `hanh_khach`
-  MODIFY `ma_hanh_khach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ma_hanh_khach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `loai_ve`
@@ -491,7 +497,7 @@ ALTER TABLE `thanh_toan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
