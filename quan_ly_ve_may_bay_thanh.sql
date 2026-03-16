@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2026 at 05:46 AM
+-- Generation Time: Mar 16, 2026 at 08:34 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -91,16 +91,18 @@ CREATE TABLE `don_dat_ve` (
 --
 
 INSERT INTO `don_dat_ve` (`ma_don`, `ma_dat_cho`, `ma_loai_ve`, `so_hanh_khach`, `tong_tien`, `trang_thai`, `thoi_gian_tao`, `ho_ten_lien_he`, `email_lien_he`, `sdt_lien_he`) VALUES
-(1, '', 4, 0, 8317980, 'CHO_THANH_TOAN', '2026-02-21 16:36:38', 'Nguyễn Văn A', 'a@gmail.com', '0901234567'),
-(2, '', 2, 0, 4720714, 'DA_THANH_TOAN', '2026-02-21 16:36:38', 'Lê Minh C', 'c@gmail.com', '0912345678'),
-(3, '', 5, 0, 10626720, 'CHO_THANH_TOAN', '2026-02-21 18:16:08', 'Huy', 'huy@gmail.com', '0938775628'),
-(4, '', 5, 0, 10626720, 'DA_THANH_TOAN', '2026-02-21 18:16:17', 'Huy', 'huy@gmail.com', '0938775628'),
-(5, '', 11, 0, 5000000, 'CHO_THANH_TOAN', '2026-02-21 19:50:59', 'Huy', 'huy@gmail.com', '0834448848'),
-(6, '', 18, 0, 6400000, 'DA_THANH_TOAN', '2026-02-21 19:57:23', 'Hân', 'han@gmail.com', '09746256447'),
-(7, '', 10, 0, 5000000, 'DA_THANH_TOAN', '2026-02-24 23:48:05', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
+(1, 'BK20260304031039315', 4, 1, 8317980, 'CHO_THANH_TOAN', '2026-02-21 16:36:38', 'Nguyễn Văn A', 'a@gmail.com', '0901234567'),
+(2, 'BK20260304031039348', 2, 1, 4720714, 'DA_THANH_TOAN', '2026-02-21 16:36:38', 'Lê Minh C', 'c@gmail.com', '0912345678'),
+(3, 'BK20260304031039363', 5, 1, 10626720, 'CHO_THANH_TOAN', '2026-02-21 18:16:08', 'Huy', 'huy@gmail.com', '0938775628'),
+(4, 'BK20260304031039385', 5, 1, 10626720, 'DA_THANH_TOAN', '2026-02-21 18:16:17', 'Huy', 'huy@gmail.com', '0938775628'),
+(5, 'BK20260304031039374', 11, 1, 5000000, 'CHO_THANH_TOAN', '2026-02-21 19:50:59', 'Huy', 'huy@gmail.com', '0834448848'),
+(6, 'BK20260304031039366', 18, 1, 6400000, 'DA_THANH_TOAN', '2026-02-21 19:57:23', 'Hân', 'han@gmail.com', '09746256447'),
+(7, 'BK20260304031039355', 10, 1, 5000000, 'DA_THANH_TOAN', '2026-02-24 23:48:05', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
 (8, 'BK20260304031039396', 39, 1, 2900000, 'DA_THANH_TOAN', '2026-03-04 09:10:39', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
 (9, 'BK20260304031642573', 39, 1, 2900000, 'CHO_THANH_TOAN', '2026-03-04 09:16:42', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
-(10, 'BK20260316054027692', 43, 1, 2900000, 'CHO_THANH_TOAN', '2026-03-16 11:40:27', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920');
+(10, 'BK20260316054027692', 43, 1, 2900000, 'CHO_THANH_TOAN', '2026-03-16 11:40:27', 'Nguyen Thi Ngoc Han B2303744', 'hanb2303744@student.ctu.edu.vn', '0775812920'),
+(11, 'BK20260316083244636', 11, 1, 2500000, 'DA_THANH_TOAN', '2026-03-16 14:32:44', 'Huỳnh Thanh', 'huynhphuocthanh.131019@gmail.com', '0338206408'),
+(12, 'BK20260316083344672', 39, 1, 2900000, 'DA_THANH_TOAN', '2026-03-16 14:33:44', 'Huỳnh Thanh', 'huynhphuocthanh.131019@gmail.com', '0338206408');
 
 -- --------------------------------------------------------
 
@@ -167,7 +169,9 @@ INSERT INTO `hanh_khach` (`ma_hanh_khach`, `ma_don`, `ho_ten`, `so_ho_chieu`, `n
 (11, 7, 'Nani', NULL, NULL),
 (12, 8, 'Ngoc Han', NULL, NULL),
 (13, 9, 'Ngoc Han', NULL, NULL),
-(14, 10, 'Ngoc Han', NULL, NULL);
+(14, 10, 'Ngoc Han', NULL, NULL),
+(15, 11, 'thanh ne', NULL, NULL),
+(16, 12, 'thanh ne', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -202,7 +206,7 @@ INSERT INTO `loai_ve` (`ma_loai_ve`, `ma_chuyen_bay`, `ten_loai_ve`, `gia_ve`, `
 (8, 4, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (9, 6, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (10, 8, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 28),
-(11, 10, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 28),
+(11, 10, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 27),
 (12, 12, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (13, 14, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (14, 16, 'Phổ thông', 2500000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
@@ -215,7 +219,7 @@ INSERT INTO `loai_ve` (`ma_loai_ve`, `ma_chuyen_bay`, `ten_loai_ve`, `gia_ve`, `
 (21, 15, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (22, 17, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
 (23, 19, 'Phổ thông', 3200000, 7, 20, 'Đổi có phí', 'Hoàn có phí', 30),
-(39, 4, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 18),
+(39, 4, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 17),
 (40, 6, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (41, 8, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
 (42, 10, 'Linh hoạt', 2900000, 10, 30, 'Đổi linh hoạt', 'Hoàn linh hoạt', 20),
@@ -324,7 +328,9 @@ INSERT INTO `thanh_toan` (`ma_thanh_toan`, `ma_don`, `phuong_thuc`, `so_tien`, `
 (2, 4, 'VI_DIEN_TU', 10626720, 'THANH_CONG', '2026-02-21 18:16:17'),
 (3, 6, 'VI_DIEN_TU', 6400000, 'THANH_CONG', '2026-02-21 19:57:35'),
 (4, 7, 'VI_DIEN_TU', 5000000, 'THANH_CONG', '2026-02-24 23:48:12'),
-(5, 8, 'VI_DIEN_TU', 2900000, 'THANH_CONG', '2026-03-04 09:10:42');
+(5, 8, 'VI_DIEN_TU', 2900000, 'THANH_CONG', '2026-03-04 09:10:42'),
+(6, 11, 'VI_DIEN_TU', 2500000, 'THANH_CONG', '2026-03-16 14:32:47'),
+(7, 12, 'VI_DIEN_TU', 2900000, 'THANH_CONG', '2026-03-16 14:33:46');
 
 -- --------------------------------------------------------
 
@@ -449,7 +455,7 @@ ALTER TABLE `chuyen_bay`
 -- AUTO_INCREMENT for table `don_dat_ve`
 --
 ALTER TABLE `don_dat_ve`
-  MODIFY `ma_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_don` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `ghe`
@@ -467,7 +473,7 @@ ALTER TABLE `hang_hang_khong`
 -- AUTO_INCREMENT for table `hanh_khach`
 --
 ALTER TABLE `hanh_khach`
-  MODIFY `ma_hanh_khach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ma_hanh_khach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `loai_ve`
@@ -491,7 +497,7 @@ ALTER TABLE `san_bay`
 -- AUTO_INCREMENT for table `thanh_toan`
 --
 ALTER TABLE `thanh_toan`
-  MODIFY `ma_thanh_toan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ma_thanh_toan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -3,12 +3,12 @@ session_start();
 require_once __DIR__ . "/db.php";
 
 $ma_don = (int)($_SESSION["ma_don"] ?? 0);
-if ($ma_don <= 0) { header("Location: index.php"); exit; }
+if ($ma_don <= 0) { header("Location: homepage.php"); exit; }
 
 $stmt = db()->prepare("SELECT tong_tien, trang_thai FROM don_dat_ve WHERE ma_don=:id");
 $stmt->execute([":id"=>$ma_don]);
 $don = $stmt->fetch();
-if (!$don) { header("Location: index.php"); exit; }
+if (!$don) { header("Location: homepage.php"); exit; }
 ?>
 <!doctype html>
 <html lang="vi">
@@ -28,7 +28,7 @@ if (!$don) { header("Location: index.php"); exit; }
       <p class="mb-1">Trạng thái: <b><?= htmlspecialchars($don["trang_thai"]) ?></b></p>
       <p class="mb-3">Tổng tiền: <b><?= vnd($don["tong_tien"]) ?></b></p>
 
-      <a class="btn btn-primary" href="index.php">Về trang chủ</a>
+      <a class="btn btn-primary" href="homepage.php">Về trang chủ</a>
     </div>
   </div>
 </div>
