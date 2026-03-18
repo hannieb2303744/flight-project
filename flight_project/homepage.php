@@ -17,8 +17,9 @@ session_start();
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+
     <title>CaMeoSky.com</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
@@ -29,15 +30,15 @@ session_start();
             <h1 class="title">CaMeoSky.com</h1>
           </a>
           <div class="menu">
-            <a href="#" class="icon" title="Thông tin liên hệ">
+            <!-- <a href="#" class="icon" title="Thông tin liên hệ">
               <i class="fa-solid fa-question"></i>
-            </a>
+            </a> -->
             <a href="#" class="icon">
               <i class="fa-solid fa-ticket" title="Vé đã đặt"></i>
             </a>
-            <a href="#" class="icon" title="Lịch sử bay">
+            <!-- <a href="#" class="icon" title="Lịch sử bay">
               <i class="fa-solid fa-heart"></i>
-            </a>
+            </a> -->
             <?php if (isset($_SESSION['fullname'])): ?>
 
             <div class="user-dropdown">
@@ -70,12 +71,12 @@ session_start();
     <div class="search-box">
       <div class="trip-type">
         <div onclick="showSearchBox()">
-          <input type="radio" name="trip" value="oneway" id="oneway" checked />
-          <label for="oneway">Khứ hồi</label>
+          <input type="radio" name="trip" value="return" id="return" checked />
+          <label for="return">Khứ hồi</label>
         </div>
         <div onclick="showSearchBox()">
-          <input type="radio" name="trip" value="return" id="return" />
-          <label for="return">Một chiều</label>
+          <input type="radio" name="trip" value="oneway" id="oneway" />
+          <label for="oneway">Một chiều</label>
         </div>
       </div>
       <form action="flights.php" method="get">
@@ -105,13 +106,18 @@ session_start();
             <input type="hidden" name="to" class="iata-value" />
             <div class="suggestion"></div>
           </div>
-          <div class="text-box">
+          <div class="text-box" id="departure-date">
             <span>Ngày đi</span>
-            <input type="date" name="date" required />
+            <input
+              type="date"
+              name="departure-date"
+              id="departure-date-input"
+              required
+            />
           </div>
           <div class="text-box" id="return-date">
             <span>Ngày về</span>
-            <input type="date" name="" />
+            <input type="date" name="return-date" id="return-date-input" />
           </div>
           <div class="text-box">
             <span>Số lượng khách</span>
@@ -195,61 +201,137 @@ session_start();
         </a>
       </div>
     </div>
-<div class="question">
-  <h1>Đặt vé máy bay với CaMeoSky</h1>
-  <div class="question-box">
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+    <div class="question">
+      <h1>Đặt vé máy bay với CaMeoSky</h1>
+      <div class="question-box">
+        <div class="question-item">
+          <div class="question-title">
+            <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách.
+            Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác
+            nhau để giúp bạn chọn chuyến bay phù hợp nhất.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span><b>Giá vé hiển thị đã bao gồm tất cả chi phí chưa?</b></span>
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Giá vé đã bao gồm thuế và phí cơ bản. Một số dịch vụ bổ sung như
+            hành lý ký gửi hoặc chọn chỗ ngồi có thể tính thêm.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span
+              ><b>Tôi có thể đặt vé cho nhiều người cùng lúc không?</b></span
+            >
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Có. Bạn chỉ cần chọn số lượng hành khách, hệ thống sẽ xử lý đặt vé
+            cho tất cả trong một lần.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span><b>Làm sao để biết chuyến bay nào rẻ nhất?</b></span>
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Bạn có thể sắp xếp kết quả theo giá hoặc chọn bộ lọc “giá thấp nhất”
+            để tìm chuyến bay tiết kiệm.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span
+              ><b>Tôi có thể thanh toán bằng những phương thức nào?</b></span
+            >
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Bạn có thể thanh toán qua thẻ ngân hàng, ví điện tử hoặc các cổng
+            thanh toán trực tuyến phổ biến.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span><b>Thông tin cá nhân của tôi có được bảo mật không?</b></span>
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Tất cả dữ liệu được mã hóa và bảo vệ theo tiêu chuẩn bảo mật hiện
+            đại.
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="question-title">
+            <span><b>Tôi nên đặt vé trước bao lâu để có giá tốt?</b></span>
+            <div class="question-arrow-item">
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+          </div>
+          <div class="question-answer">
+            Thông thường, đặt trước từ 2–6 tuần sẽ giúp bạn có nhiều lựa chọn và
+            giá tốt hơn.
+          </div>
+        </div>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
     </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-item">
+        <div class="footer-title">
+          <a href="#" class="logo">
+          <h1><i class="fa-solid fa-cloud"></i></h1>
+          <h1 class="title">CaMeoSky.com</h1>
+        </a>
+        <h3>So sánh thông minh - Bay xa giá tốt</h3>
+        </div>
+        <span>Hãng bay đã hợp tác với chúng tôi:</span>
+        <div class="flight-list">
+          <div><img src="https://thuvienvector.vn/wp-content/uploads/2025/04/hoa-sen-vang-logo-vietnam-airlines.jpg" alt="VietNam Airlines" ></div>
+          <div><img src="https://ibrand.vn/wp-content/uploads/2024/10/Logo-vietjet-1.jpg" alt="VietjetAir"></div>
+          <div><img src="https://i.pinimg.com/736x/33/24/f4/3324f40c4aea5b0a5a999e3d16d678c1.jpg" alt="Bamboo Airways"></div>
+          <div><img src="https://diemdenantoan.sgtiepthi.vn/wp-content/uploads/2021/12/Untitled-design-5.png" alt="VietTravel"></div>
+        </div>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      <div class="footer-item">
+        <h2>Liên hệ với chúng tôi:</h2>
+        <span><i class="fa-solid fa-at"></i> dhct@ctu.edu.vn</span>
+        <span><i class="fa-solid fa-phone"></i> +84292 3831 530; 3838 237; 3832 663</span>
+        <span><i class="fa-solid fa-location-dot"></i>    Khu 2, Đ. 3/2, P. Ninh Kiều, TP. Cần Thơ</span>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      <div class="footer-item">
+        <h2>Theo dõi chúng tôi tại:</h2>
+        <div class="social">
+          <a href="https://www.facebook.com/CTUDHCT/?locale=vi_VN"><i class="fa-brands fa-facebook"></i></a>
+          <a href="https://www.instagram.com/ctudhct?fbclid=IwY2xjawQnRU1leHRuA2FlbQIxMABicmlkETFneVZyendWVHZORlFxM3BJc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHkuIuwIA69lMBUr8NwBoUApBtFiOzyXh0-V857F5Vw87DPIOPRClMz4PRP0Q_aem_-F-lXNYP_QuXXdtHw1K-Ig"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://x.com/CTUDHCT"><i class="fa-brands fa-twitter"></i></a>
+        </div>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
+      <div class="footer-last">
+        <h3>© 2026 CaMeoSky. All rights reserved.</h2>
       </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-    <div class="question-item">
-      <div class="question-title">
-        <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-        <div class="question-arrow-item"><i class="fa-solid fa-caret-down"></i></div>
-      </div>
-      <div class="question-answer">Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách. Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác nhau để giúp bạn chọn chuyến bay phù hợp nhất.</div>
-    </div>
-  </div>
-</div>
-    <footer></footer>
+    </footer>
     <script src="js.js"></script>
   </body>
 </html>

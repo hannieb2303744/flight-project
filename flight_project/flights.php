@@ -7,9 +7,9 @@ require_once __DIR__ . "/db.php";
 
 $from = strtoupper(trim($_GET["from"] ?? "SGN"));
 $to   = strtoupper(trim($_GET["to"] ?? "BKK"));
-$date = $_GET["date"] ?? date("Y-m-d");
+$departure_date = $_GET["departure-date"] ?? date("Y-m-d");
+$return_date = $_GET["return-date"] ?? null;
 $pax  = max(1, (int)($_GET["pax"] ?? 1));
-
 $flash = $_SESSION["flash_error"] ?? null;
 unset($_SESSION["flash_error"]);
 
@@ -44,7 +44,7 @@ WHERE sbdi.ma_iata = :from
 ORDER BY gia_tu ASC
 ";
 $stmt = db()->prepare($sql);
-$stmt->execute([":from"=>$from, ":to"=>$to, ":date"=>$date]);
+$stmt->execute([":from"=>$from, ":to"=>$to, ":date"=>$departure_date ]);
 $flights = $stmt->fetchAll();
 
 function phút_thành_giờ($m){
@@ -81,7 +81,7 @@ function phút_thành_giờ($m){
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
           <div class="h5 mb-1"><?= htmlspecialchars($from) ?> → <?= htmlspecialchars($to) ?></div>
-          <div class="text-muted">Ngày <?= htmlspecialchars($date) ?> | <?= (int)$pax ?> hành khách</div>
+          <div class="text-muted">Ngày <?= htmlspecialchars($departure_date ) ?> | <?= (int)$pax ?> hành khách</div>
         </div>
         <a class="btn btn-outline-primary" href="trangchu.php">Đổi tìm kiếm</a>
       </div>

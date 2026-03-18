@@ -1,5 +1,5 @@
 function showSearchBox() {
-  if (document.getElementById("oneway").checked) {
+  if (document.getElementById("return").checked) {
     document.getElementById("return-date").style.display = "flex";
   } else {
     document.getElementById("return-date").style.display = "none";
@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
 // ======================= question-answer =====================
 document.addEventListener("DOMContentLoaded", function () {
   const quesTitle = document.querySelectorAll(".question-title");
-  quesTitle.forEach(function(title){
-    title.addEventListener("click", function(){
+  quesTitle.forEach(function (title) {
+    title.addEventListener("click", function () {
       const answer = title.nextElementSibling;
       const arrow = title.querySelector(".question-arrow-item");
       answer.classList.toggle("active");
@@ -62,17 +62,15 @@ searchInput.forEach((input) => {
           let div = document.createElement("div");
           div.classList.add("suggestion-item");
           div.innerHTML = `
-      <strong>${item.thanh_pho} (${item.ma_iata})</strong>
-      <div>${item.ten_san_bay}</div>
-      <small>${item.quoc_gia}</small>`;
+      <strong>${item.TENDIADIEM} (${item.MADIADIEM})</strong>
+      <div>${item.TENSANBAY}</div>
+      <small>${item.QUOC_GIA}</small>`;
 
           div.onclick = function () {
-            input.value = item.thanh_pho + " (" + item.ma_iata + ")";
-
-            // tìm input hidden gần nhất
+            input.value = item.TENDIADIEM + " (" + item.MADIADIEM + ")";
             const hiddenInput =
               input.parentElement.querySelector(".iata-value");
-            hiddenInput.value = item.ma_iata;
+            hiddenInput.value = item.MADIADIEM;
 
             suggestionBox.style.display = "none";
           };
@@ -84,4 +82,25 @@ searchInput.forEach((input) => {
       });
   });
 });
-// ======================= guest and chair =====================
+// ======================= date =====================4
+document.addEventListener("DOMContentLoaded", function () {
+  const departureInput = document.querySelector('input[name="departure-date"]');
+  const returnInput = document.querySelector('input[name="return-date"]');
+
+  if (!departureInput || !returnInput) return;
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  departureInput.min = todayStr;
+  returnInput.min = todayStr;
+
+  departureInput.addEventListener("change", function () {
+    returnInput.min = departureInput.value;
+    if (returnInput.value < departureInput.value) {
+      returnInput.value = "";
+    }
+  });
+});

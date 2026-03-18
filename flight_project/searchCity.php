@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "quan_ly_ve_may_bay_thanh";
+$dbname = "quan_ly_ve_may_bay_new";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -21,8 +21,9 @@ $q = Vietnamese($q);
 
 $sql = $conn->prepare("
     SELECT *
-    FROM san_bay
-    WHERE LOWER(unsigned_city) LIKE CONCAT('%', ?, '%')
+    FROM diadiem a
+    JOIN sanbay b ON a.MADIADIEM = b.MADIADIEM 
+    WHERE LOWER(a.TENDIADIEM) LIKE CONCAT('%', ?, '%')
 ");
 
 $sql->bind_param("s", $q);

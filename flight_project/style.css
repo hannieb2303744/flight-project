@@ -10,6 +10,7 @@ a {
   text-decoration: none;
 }
 /* ============================================header========================================= */
+
 .header,
 .search-box {
   height: fit-content;
@@ -30,6 +31,7 @@ a {
 }
 .logo {
   gap: 0rem;
+  justify-content: flex-start;
 }
 .title {
   font-family: "Poppins", sans-serif;
@@ -103,7 +105,7 @@ header,
   padding-bottom: 2%;
 }
 .search {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .trip-type {
   justify-content: flex-start;
@@ -121,8 +123,9 @@ header,
   color: #005b96;
   border-radius: 0.5rem;
   padding: 0.5rem;
-  width: 13rem;
+  min-width: 13rem;
   margin-left: -0.5rem;
+  flex: 1;
 }
 .text-box > input {
   background-color: #cfecf7;
@@ -172,7 +175,7 @@ header,
   width: auto;
   height: 1rem;
 }
-/* ============================================.why-choose-us========================================= */
+/* ============================================why-choose-us========================================= */
 .why-choose-us {
   background-color: #e4f4f9;
 }
@@ -224,11 +227,10 @@ header,
   filter: blur(1.5);
 }
 
-/* ============================================.discover========================================= */
+/* ============================================discover========================================= */
 .discover {
   background-color: #e4f4f9;
   padding: 1rem 9rem;
-  border-bottom: 1px solid #c9ced5;
 }
 .discover-box {
   background-image: url("https://i.pinimg.com/1200x/8d/be/98/8dbe9859511d3eeb1356858e93fb099b.jpg");
@@ -263,13 +265,10 @@ header,
   color: #005b96;
 }
 
-/* ============================================.question========================================= */
+/* ============================================question========================================= */
 .question {
   background-color: #e4f4f9;
   padding: 1rem 9rem;
-  border-bottom: 1px solid #c9ced5;
-}
-.question-box {
 }
 
 .question-item {
@@ -279,6 +278,10 @@ header,
   row-gap: 1rem;
   padding-top: 2rem;
   padding-bottom: 0.7rem;
+}
+
+.question-title:hover {
+  cursor: pointer;
 }
 
 .question-title {
@@ -296,6 +299,79 @@ header,
 
 .question-arrow-item.active {
   transform: scaleY(-1);
+}
+
+/*============================================footer========================================*/
+.footer {
+  background-color: #005b96;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.5rem 8.5rem;
+  gap: 6rem;
+  color: #a2d5f2;
+}
+
+.footer-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.footer-title > h3 {
+  margin-top: -1rem;
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.social > a {
+  color: #a2d5f2;
+  font-size: xx-large;
+}
+
+.flight-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.flight-list > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.2rem;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.flight-list > div > img {
+  width: 4rem;
+  height: auto;
+  border-radius: 0.1rem;
+}
+
+.footer-last {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: calc(0.5);
+}
+
+.footer-last > h3 {
+  border-top: 1px solid #c4cbd4bf;
+  padding-top: 1rem;
+  width: 42rem;
+  text-align: center;
+  color: #a2d5f2;
 }
 /* ================= AUTH (LOGIN / REGISTER) ================= */
 .auth-wrapper {
