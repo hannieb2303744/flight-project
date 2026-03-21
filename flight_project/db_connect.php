@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root"; // Mặc định của XAMPP
 $password = "";     // Mặc định của XAMPP là để trống
-$dbname = "quan_ly_ve_may_bay_thanh"; // THAY ĐỔI TÊN NÀY CHO ĐÚNG VỚI DB CỦA BẠN
+$dbname = "quan_ly_ve_may_bay"; // THAY ĐỔI TÊN NÀY CHO ĐÚNG VỚI DB CỦA BẠN
 
 // Tạo kết nối
 $conn = new mysqli($servername, $username, $password, $dbname);

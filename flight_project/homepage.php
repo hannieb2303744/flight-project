@@ -39,13 +39,13 @@ session_start();
             <!-- <a href="#" class="icon" title="Lịch sử bay">
               <i class="fa-solid fa-heart"></i>
             </a> -->
-            <?php if (isset($_SESSION['fullname'])): ?>
+            <?php if (isset($_SESSION['username'])): ?>
 
             <div class="user-dropdown">
               <div class="user user-btn">
                 <i class="fa-solid fa-user"></i>
                 <span
-                  ><b><?php echo $_SESSION['fullname']; ?></b></span
+                  ><b><?php echo $_SESSION['username']; ?></b></span
                 >
               </div>
 
