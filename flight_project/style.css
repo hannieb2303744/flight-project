@@ -77,6 +77,7 @@ header,
 }
 .user-btn {
   background-color: #005b96;
+  cursor: pointer;
 }
 .icon.fa-solid {
   height: 1.5rem;
@@ -89,15 +90,28 @@ header,
 }
 .dropdown-menu {
   position: absolute;
-  top: 110%;
+  top: 120%;
   right: 0;
-  min-width: 18rem;
+  min-width: 180px;
+
   display: none;
   flex-direction: column;
+
+  background-color: #cfecf7;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
   z-index: 9999;
+  
+    opacity: 0;
+  transform: translateY(-10px);
+  transition: 0.25s ease;
 }
 .dropdown-menu.active {
   display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ============================================search-box========================================= */
@@ -151,8 +165,15 @@ header,
 }
 .suggestion-item:hover,
 .dropdown-menu a:hover {
-  filter: brightness(0.9);
+  background-color: #a2d5f2;
 }
+.dropdown-menu a {
+  padding: 0.8rem 1rem;
+  color: #005b96;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
 .btn-search {
   display: flex;
   justify-content: center;
@@ -443,6 +464,7 @@ header,
   width: 100%;
   padding: 12px;
   background-color: #005b96;
+
   color: white;
   border: none;
   border-radius: 8px;
@@ -450,12 +472,14 @@ header,
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
-  margin-top: 10px;
+  margin-top: 25px;
+  
 }
 
 .auth-btn:hover {
   background-color: #003f6d;
   transform: translateY(-1px);
+    color: #ffffff;
 }
 
 .auth-error {
@@ -478,4 +502,75 @@ header,
   color: #005b96;
   text-decoration: none;
   font-weight: bold;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-group {
+  flex: 1;
+}
+
+/* ================= PROFILE (THÔNG TIN CÁ NHÂN) ================= */
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e4f4f9 0%, #a2d5f2 100%);
+  padding: 20px;
+}
+
+.profile-box {
+  background: #ffffff;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 91, 150, 0.15);
+}
+
+.profile-box h2 {
+  text-align: center;
+  color: #005b96;
+  margin-bottom: 1.5rem;
+}
+
+/* từng dòng thông tin */
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.profile-item label {
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-item span {
+  color: #555;
+}
+
+
+/* nút quay về */
+.auth-btn {
+  display: block;
+  text-align: center;
+  background: #005b96;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 25px;
+  color: #fff !important;
+  font-weight: 500;
+}
+.auth-btn:hover {
+  color: #ffffff;
 }

@@ -1,5 +1,5 @@
 <?php
-$mysqli = new mysqli("localhost","root","","quan_ly_ve_may_bay_thanh");
+$mysqli = new mysqli("localhost","root","","quan_ly_ve_may_bay");
 
 // kiemta connection
 if ($mysqli -> connect_errno) {

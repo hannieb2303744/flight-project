@@ -1,4 +1,11 @@
+<?php
+session_start();
 
+if (!isset($_SESSION["role"]) || strtolower($_SESSION["role"]) != 1) {
+    header("Location: ../login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
