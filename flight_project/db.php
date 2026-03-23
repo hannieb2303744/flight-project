@@ -7,7 +7,7 @@ function db(): PDO {
     if ($pdo) return $pdo;
 
     $host = "localhost";
-    $dbname = "quan_ly_ve_may_bay_thanh";
+    $dbname = "quan_ly_ve_may_bay";
     $user = "root";
     $pass = "";
     $charset = "utf8mb4";

@@ -5,8 +5,12 @@ error_reporting(E_ALL);
 session_start();
 require_once __DIR__ . "/db.php";
 
-$from = strtoupper(trim($_GET["from"] ?? "SGN"));
-$to   = strtoupper(trim($_GET["to"] ?? "BKK"));
+$from_input = $_GET["from"] ?? "SGN"; 
+preg_match('/\((.*?)\)$/', $from_input, $matches_from);
+$from = strtoupper($matches_from[1] ?? "SGN");
+$to_input = $_GET["to"] ?? "BKK";
+preg_match('/\((.*?)\)$/', $to_input, $matches);
+$to = strtoupper($matches[1] ?? "BKK");
 $departure_date = $_GET["departure-date"] ?? date("Y-m-d");
 $return_date = $_GET["return-date"] ?? null;
 $pax  = max(1, (int)($_GET["pax"] ?? 1));
