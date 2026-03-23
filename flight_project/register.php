@@ -6,17 +6,22 @@ $error = "";
 $success = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = trim($_POST["fullname"]);
+    // Lấy dữ liệu từ Form (Đảm bảo các name trong thẻ <input> là 'username', 'email', 'password'...)
+    $username = trim($_POST["username"]); 
     $email = trim($_POST["email"]);
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
+    
+    $fullname = $_POST["fullname"];
+    $phone    = $_POST["phone"];
+    $birthday = $_POST["birthday"];
+    $gender   = $_POST["gender"];
 
-    // Kiểm tra mật khẩu khớp nhau
     if ($password !== $confirm_password) {
         $error = "Mật khẩu xác nhận không khớp!";
     } else {
-        // Kiểm tra email đã tồn tại chưa
-        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        // 1. SỬA LỖI: Đổi 'id' thành 'ID_USER' để khớp với DB
+        $stmt = $conn->prepare("SELECT ID_USER FROM users WHERE EMAIL = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -24,15 +29,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows > 0) {
             $error = "Email này đã được đăng ký!";
         } else {
-            // Mã hóa mật khẩu và lưu vào DB
+            // Mã hóa mật khẩu
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $fullname, $email, $hashed_password);
+            
+            // 2. SỬA LỖI: Đổi 'fullname' thành 'USERNAME' và 'password' thành 'PASSWORD'
+            // Vì bạn chưa phân quyền, mình sẽ để ROLE mặc định là 'customer' hoặc 'user'
+            $default_role = 'user';
+            
+            $stmt = $conn->prepare("
+INSERT INTO users (USERNAME, EMAIL, PASSWORD, ROLE, FULLNAME, PHONE, BIRTHDAY, GENDER) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+");
+            $stmt->bind_param("ssssssss",
+    $username,
+    $email,
+    $hashed_password,
+    $role,
+    $fullname,
+    $phone,
+    $birthday,
+    $gender
+);
             
             if ($stmt->execute()) {
                 $success = "Đăng ký thành công! <a href='login.php'>Đăng nhập ngay</a>";
             } else {
-                $error = "Có lỗi xảy ra, vui lòng thử lại.";
+                $error = "Có lỗi xảy ra: " . $conn->error;
             }
         }
     }
@@ -62,24 +84,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php echo $success; ?>
             </div>
         <?php endif; ?>
-
         <form method="POST">
-            <input type="text" name="fullname" placeholder="Họ và tên" required>
-            
-            <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="fullname" placeholder="Họ và tên">
 
-            <div class="password-field">
-                <input type="password" name="password" id="reg_password" placeholder="Mật khẩu" required>
-                <span class="toggle-eye" onclick="togglePassword('reg_password')">👁</span>
-            </div>
+    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+    
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="Số điện thoại">
+<div class="form-row">
+  
+  <div class="form-group">
+    <input type="date" name="birthday">
+  </div>
 
-            <div class="password-field">
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu" required>
-                <span class="toggle-eye" onclick="togglePassword('confirm_password')">👁</span>
-            </div>
+  <div class="form-group">
+    <select name="gender">
+      <option value="">Giới tính</option>
+      <option value="Nam">Nam</option>
+      <option value="Nữ">Nữ</option>
+      <option value="Khác">Khác</option>
+    </select>
+  </div>
 
-            <button type="submit" class="auth-btn">Đăng ký tài khoản</button>
-        </form>
+</div>
+
+    <div class="password-field">
+        <input type="password" name="password" id="reg_password" placeholder="Mật khẩu" required>
+        <span class="toggle-eye" onclick="togglePassword('reg_password')">👁</span>
+    </div>
+
+    <div class="password-field">
+        <input type="password" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu" required>
+        <span class="toggle-eye" onclick="togglePassword('confirm_password')">👁</span>
+    </div>
+
+    <button type="submit" class="auth-btn">Đăng ký tài khoản</button>
+</form>
 
         <p>Đã có tài khoản? <a href="login.php">Đăng nhập</a></p>
     </div>

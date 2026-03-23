@@ -36,52 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-// ======================= suggestion-search =====================
-const searchInput = document.querySelectorAll(".searchInput");
 
-searchInput.forEach((input) => {
-  const suggestionBox = input.parentElement.querySelector(".suggestion");
-  input.addEventListener("input", function () {
-    let value = input.value.trim();
-    suggestionBox.innerHTML = "";
-
-    if (value === "") {
-      suggestionBox.style.display = "none";
-      return;
-    }
-
-    fetch("searchCity.php?q=" + encodeURIComponent(value))
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.length === 0) {
-          suggestionBox.style.display = "none";
-          return;
-        }
-
-        data.forEach((item) => {
-          let div = document.createElement("div");
-          div.classList.add("suggestion-item");
-          div.innerHTML = `
-      <strong>${item.TENDIADIEM} (${item.MADIADIEM})</strong>
-      <div>${item.TENSANBAY}</div>
-      <small>${item.QUOC_GIA}</small>`;
-
-          div.onclick = function () {
-            input.value = item.TENDIADIEM + " (" + item.MADIADIEM + ")";
-            const hiddenInput =
-              input.parentElement.querySelector(".iata-value");
-            hiddenInput.value = item.MADIADIEM;
-
-            suggestionBox.style.display = "none";
-          };
-
-          suggestionBox.appendChild(div);
-        });
-
-        suggestionBox.style.display = "block";
-      });
-  });
-});
 // ======================= date =====================4
 document.addEventListener("DOMContentLoaded", function () {
   const departureInput = document.querySelector('input[name="departure-date"]');
@@ -102,5 +57,25 @@ document.addEventListener("DOMContentLoaded", function () {
     if (returnInput.value < departureInput.value) {
       returnInput.value = "";
     }
+  });
+});
+
+// ======================= inputTo =====================4
+
+document.querySelectorAll(".book-now").forEach((btn) => {
+  btn.addEventListener("click", function (e) {
+    const toInput = document.querySelector('input[name="to"]');
+    const hiddenToCode = document.querySelector('input[name="to_code"]');
+    const fromInput = document.querySelector('input[name="from"]');
+    const toValue = this.dataset.to;
+    toInput.value = toValue;
+
+    const selectedOption = Array.from(
+      document.querySelectorAll("#to-list option"),
+    ).find((opt) => opt.value === toValue);
+    if (selectedOption) {
+      hiddenToCode.value = selectedOption.dataset.code;
+    }
+    fromInput.focus();
   });
 });

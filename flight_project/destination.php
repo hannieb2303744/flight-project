@@ -1,19 +1,21 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "quan_ly_ve_may_bay_new");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+$conn = new mysqli("localhost", "root", "", "quan_ly_ve_may_bay");
+if ($conn->connect_error) {
+    die("Kết nối thất bại");
+}
+$sql = "SELECT * FROM diemdulich";
+$result = $conn->query($sql);
 
-$sql = "SELECT a.MADIADIEM, a.TENDIADIEM, b.TENSANBAY, a.QUOC_GIA
+$sql2 = "SELECT a.MADIADIEM, a.TENDIADIEM, b.TENSANBAY, a.QUOC_GIA
         FROM diadiem a
         JOIN sanbay b ON a.MADIADIEM = b.MADIADIEM
         ORDER BY a.TENDIADIEM ASC";
-
-$result = $conn->query($sql);
+$result1 = $conn->query($sql2);
 $diadiem_list = [];
-while($row = $result->fetch_assoc()){
+while($row = $result1->fetch_assoc()){
     $diadiem_list[] = $row;
 }
-$conn->close();
 ?>
 
 <!doctype html>
@@ -150,171 +152,39 @@ $conn->close();
       </form>
     </div>
     </header>
-    <div class="why-choose-us">
-      <h1 class="title-choose">Vì sao nên chọn CaMeoSky ?</h1>
-      <div class="choose-container">
-        <div class="choose-box">
-          <div class="icon-choose">
-            <i class="fa-solid fa-chart-column"></i>
-          </div>
-          <h3>So sánh <br />thông minh</h3>
-          <small
-            >Hệ thống tự động tổng hợp và so sánh giá vé từ nhiều hãng hàng
-            không khác nhau, giúp bạn dễ dàng tìm ra chuyến bay phù hợp nhất với
-            mức giá tối ưu chỉ trong vài giây.</small
-          >
-        </div>
-        <div class="choose-box">
-          <div class="icon-choose">
-            <i class="fa-solid fa-lightbulb"></i>
-          </div>
-          <h3>Giá vé công khai, minh bạch</h3>
-          <small
-            >Mọi thông tin về giá vé, thuế và phụ phí đều được hiển thị rõ ràng
-            ngay từ đầu. Bạn biết chính xác số tiền cần thanh toán, không có chi
-            phí ẩn hay bất ngờ vào phút cuối.</small
-          >
-        </div>
-        <div class="choose-box">
-          <div class="icon-choose">
-            <i class="fa-solid fa-bolt"></i>
-          </div>
-          <h3>
-            Đặt vé <br />
-            nhanh chóng
-          </h3>
-          <small
-            >Chỉ với vài bước đơn giản, bạn có thể hoàn tất việc đặt vé trong
-            thời gian ngắn. Giao diện thân thiện giúp việc tìm chuyến bay, chọn
-            vé và thanh toán trở nên dễ dàng.</small
-          >
-        </div>
-        <div class="choose-box">
-          <div class="icon-choose">
-            <i class="fa-solid fa-dollar-sign"></i>
-          </div>
-          <h3>Thanh toán <br />an toàn</h3>
-          <small
-            >Hệ thống thanh toán được bảo vệ bằng công nghệ bảo mật hiện đại,
-            đảm bảo mọi thông tin cá nhân và giao dịch của bạn luôn được giữ an
-            toàn tuyệt đối.</small
-          >
-        </div>
-        <div class="choose-box">
-          <div class="icon-choose">
-            <i class="fa-solid fa-tags"></i>
-          </div>
-          <h3>Siêu ưu đãi <br />mỗi ngày</h3>
-          <small
-            >Liên tục cập nhật các chương trình khuyến mãi và giá vé hấp dẫn từ
-            nhiều hãng hàng không, giúp bạn có thêm cơ hội săn được vé rẻ cho
-            mọi hành trình.</small
-          >
-        </div>
-      </div>
+    
+      <div class="destinations">
+        <h1>CÁC ĐỊA ĐIỂM NỔI TIẾNG TRONG NƯỚC</h1>
+    <div class="destination-group">
+        <?php
+        $sql = "SELECT * FROM diemdulich WHERE DULICHTRONGNUOC = 1";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+        ?>
+            <a href="sightseeing.php?madiemdulich=<?php echo $row['MADIEMDULICH']; ?>" class="destination-box" 
+                 style="background-image: url('<?php echo $row['HINHANH']; ?>');">
+                <h3><?php echo $row['TENDIEMDULICH']; ?></h3>
+            </a>
+        <?php } ?>
     </div>
-    <div class="discover">
-      <div class="discover-box">
-        <h3>Bạn vẫn chưa lựa chọn được điểm đến?</h3>
-        <a href="destination.php" class="btn-discover">
-          <h2>Khám Phá Ngay</h2>
-        </a>
-      </div>
+
+    <h1>CÁC ĐỊA ĐIỂM NỔI TIẾNG QUỐC TẾ</h1>
+    <div class="destination-group">
+        <?php
+        $sql = "SELECT * FROM diemdulich WHERE DULICHTRONGNUOC = 0";
+        $result = $conn->query($sql);
+
+        while ($row = $result->fetch_assoc()) {
+        ?>
+            <a href="sightseeing.php?madiemdulich=<?php echo $row['MADIEMDULICH']; ?>" class="destination-box" 
+                 style="background-image: url('<?php echo $row['HINHANH']; ?>');">
+                <h3><?php echo $row['TENDIEMDULICH']; ?></h3>
+            </a>
+        <?php } ?>
     </div>
-    <div class="question">
-      <h1>Đặt vé máy bay với CaMeoSky</h1>
-      <div class="question-box">
-        <div class="question-item">
-          <div class="question-title">
-            <span><b>Làm thế nào để tìm chuyến bay phù hợp với tôi?</b></span>
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Bạn chỉ cần nhập điểm đi, điểm đến, ngày bay và số lượng hành khách.
-            Hệ thống sẽ tự động so sánh giá vé từ nhiều hãng hàng không khác
-            nhau để giúp bạn chọn chuyến bay phù hợp nhất.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span><b>Giá vé hiển thị đã bao gồm tất cả chi phí chưa?</b></span>
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Giá vé đã bao gồm thuế và phí cơ bản. Một số dịch vụ bổ sung như
-            hành lý ký gửi hoặc chọn chỗ ngồi có thể tính thêm.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span
-              ><b>Tôi có thể đặt vé cho nhiều người cùng lúc không?</b></span
-            >
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Có. Bạn chỉ cần chọn số lượng hành khách, hệ thống sẽ xử lý đặt vé
-            cho tất cả trong một lần.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span><b>Làm sao để biết chuyến bay nào rẻ nhất?</b></span>
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Bạn có thể sắp xếp kết quả theo giá hoặc chọn bộ lọc “giá thấp nhất”
-            để tìm chuyến bay tiết kiệm.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span
-              ><b>Tôi có thể thanh toán bằng những phương thức nào?</b></span
-            >
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Bạn có thể thanh toán qua thẻ ngân hàng, ví điện tử hoặc các cổng
-            thanh toán trực tuyến phổ biến.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span><b>Thông tin cá nhân của tôi có được bảo mật không?</b></span>
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Tất cả dữ liệu được mã hóa và bảo vệ theo tiêu chuẩn bảo mật hiện
-            đại.
-          </div>
-        </div>
-        <div class="question-item">
-          <div class="question-title">
-            <span><b>Tôi nên đặt vé trước bao lâu để có giá tốt?</b></span>
-            <div class="question-arrow-item">
-              <i class="fa-solid fa-caret-down"></i>
-            </div>
-          </div>
-          <div class="question-answer">
-            Thông thường, đặt trước từ 2–6 tuần sẽ giúp bạn có nhiều lựa chọn và
-            giá tốt hơn.
-          </div>
-        </div>
-      </div>
-    </div>
+
+</div>
+        
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-item">
@@ -352,6 +222,5 @@ $conn->close();
         <h3>© 2026 CaMeoSky. All rights reserved.</h2>
       </div>
     </footer>
-    <script src="js.js"></script>
   </body>
 </html>

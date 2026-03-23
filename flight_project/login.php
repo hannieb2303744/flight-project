@@ -1,30 +1,43 @@
 <?php
-session_start(); // BẮT BUỘC có để dùng $_SESSION
-include 'db_connect.php'; // Đảm bảo bạn đã tạo file này
+session_start();
+include 'db_connect.php'; 
 
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $email = trim($_POST["email"]);
     $password = $_POST["password"];
 
-    // Sử dụng Prepared Statement để chống SQL Injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE EMAIL = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        if (password_verify($password, $user["password"])) {
-            $_SESSION["fullname"] = $user["fullname"];
-            header("Location: homepage.php");
-            exit();
+
+        if (password_verify($password, $user["PASSWORD"])) {
+
+            // Lưu session
+            $_SESSION["user_id"]  = $user["ID_USER"];
+            $_SESSION["username"] = $user["USERNAME"];
+            $_SESSION["role"]     = $user["ROLE"];
+
+            // Điều hướng theo role
+if ($user["ROLE"] == 1) {
+    header("Location: admincp/index.php");
+} else {
+    header("Location: homepage.php");
+}
         }
     }
+
     $error = "Email hoặc mật khẩu không đúng!";
+    $stmt->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -40,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>ĐĂNG NHẬP</h2>
 
         <?php if ($error != ""): ?>
-            <div class="auth-error"><?php echo $error; ?></div>
+            <div class="auth-error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST">
+        <form method="POST" action="">
             <input type="email" name="email" placeholder="Email" required>
 
             <div class="password-field">
@@ -52,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        id="login_password" 
                        placeholder="Mật khẩu" 
                        required>
-                <span class="toggle-eye" onclick="togglePassword('login_password')">👁</span>
+                <span class="toggle-eye" onclick="togglePassword('login_password', this)">👁</span>
             </div>
 
             <button type="submit" class="auth-btn">Đăng nhập</button>
@@ -63,15 +76,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <script>
-function togglePassword(id) {
+function togglePassword(id, el) {
     var input = document.getElementById(id);
-    var icon = event.target;
+
     if (input.type === "password") {
         input.type = "text";
-        icon.innerText = "🔒"; // Đổi icon khi hiện mật khẩu nếu muốn
+        el.innerText = "🔒";
     } else {
         input.type = "password";
-        icon.innerText = "👁";
+        el.innerText = "👁";
     }
 }
 </script>
