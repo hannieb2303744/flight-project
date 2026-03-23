@@ -1,42 +1,49 @@
 <?php
+require_once __DIR__ . "/db.php";
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "quan_ly_ve_may_bay_new";
+header("Content-Type: application/json; charset=utf-8");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$q = trim($_GET['q'] ?? '');
 
-if ($conn->connect_error) {
-    die("Connection failed: ". $conn->connect_error);
+if ($q === '') {
+    echo json_encode([], JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
-function Vietnamese($str) {
-    $str = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $str);
-    return strtolower($str);
-}
+$pdo = db();
 
-$q = $_GET['q'] ?? '';
-$q = Vietnamese($q);
+$sql = "
+    SELECT 
+        sb.MASANBAY,
+        sb.TENSANBAY,
+        dd.TENDIADIEM
+    FROM sanbay sb
+    JOIN diadiem dd ON dd.MADIADIEM = sb.MADIADIEM
+    WHERE sb.MASANBAY LIKE :q
+       OR sb.TENSANBAY LIKE :q
+       OR dd.TENDIADIEM LIKE :q
+    ORDER BY sb.MASANBAY ASC
+    LIMIT 10
+";
 
-$sql = $conn->prepare("
-    SELECT *
-    FROM diadiem a
-    JOIN sanbay b ON a.MADIADIEM = b.MADIADIEM 
-    WHERE LOWER(a.TENDIADIEM) LIKE CONCAT('%', ?, '%')
-");
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    ':q' => '%' . $q . '%'
+]);
 
-$sql->bind_param("s", $q);
-$sql->execute();
-$result = $sql->get_result();
+$rows = $stmt->fetchAll();
 
 $data = [];
-while($row = $result->fetch_assoc()){
-    $data[] = $row;
+
+foreach ($rows as $row) {
+    $data[] = [
+        'value' => $row['MASANBAY'],
+        'label' => $row['MASANBAY'] . ' - ' . $row['TENSANBAY'] . ' (' . $row['TENDIADIEM'] . ')',
+        'ma_san_bay' => $row['MASANBAY'],
+        'ten_san_bay' => $row['TENSANBAY'],
+        'ten_dia_diem' => $row['TENDIADIEM']
+    ];
 }
 
-echo json_encode($data);
-
-$sql->close();
-$conn->close();
+echo json_encode($data, JSON_UNESCAPED_UNICODE);
 ?>

@@ -2,50 +2,96 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-session_start();
 require_once __DIR__ . "/db.php";
 
+// hàm query chuyến bay dùng cả hai chiều
+function getFlights($from, $to, $date) {
+    $sql = "
+    SELECT
+        cb.MACHUYENBAY,
+        hmb.TENHANG,
+        sbdi.MASANBAY AS diem_di,
+        sbden.MASANBAY AS diem_den,
+        sbdi.TENSANBAY AS ten_san_bay_di,
+        sbden.TENSANBAY AS ten_san_bay_den,
+        cb.THOIGIANDI,
+        cb.THOIGIANDEN,
+        TIMESTAMPDIFF(MINUTE, cb.THOIGIANDI, cb.THOIGIANDEN) AS thoi_gian_bay_phut,
+        MIN(g.GIAGHE) AS gia_tu,
+        COUNT(DISTINCT g.MALOAIGHE) AS so_loai_ghe,
+        COUNT(g.MAGHE) AS tong_so_ghe_trong
+    FROM chuyenbay cb
+    JOIN maybay mb ON mb.MAMAYBAY = cb.MAMAYBAY
+    JOIN hangmaybay hmb ON hmb.MAHANG = mb.MAHANG
+    JOIN sanbay sbdi ON sbdi.MASANBAY = cb.MASANBAYDI
+    JOIN sanbay sbden ON sbden.MASANBAY = cb.MASANBAYDEN
+    JOIN ghe g ON g.MAMAYBAY = cb.MAMAYBAY
+    WHERE cb.MASANBAYDI = :from
+      AND cb.MASANBAYDEN = :to
+      AND DATE(cb.THOIGIANDI) = :departure_date
+      AND g.TRANGTHAI = 'TRONG'
+    GROUP BY
+        cb.MACHUYENBAY, hmb.TENHANG,
+        sbdi.MASANBAY, sbden.MASANBAY,
+        sbdi.TENSANBAY, sbden.TENSANBAY,
+        cb.THOIGIANDI, cb.THOIGIANDEN
+    ORDER BY gia_tu ASC, cb.THOIGIANDI ASC
+    ";
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute([
+        ":from" => $from,
+        ":to" => $to,
+        ":departure_date" => $date
+    ]);
+
+    return $stmt->fetchAll();
+}
+
 $from = strtoupper(trim($_GET["from"] ?? "SGN"));
-$to   = strtoupper(trim($_GET["to"] ?? "BKK"));
-$departure_date = $_GET["departure-date"] ?? date("Y-m-d");
-$return_date = $_GET["return-date"] ?? null;
+$to   = strtoupper(trim($_GET["to"] ?? "HAN"));
+$trip_type = $_GET["trip_type"] ?? "oneway";
+$departure_date = $_GET["departure_date"] ?? date("Y-m-d");
+$return_date = $_GET["return_date"] ?? null;
 $pax  = max(1, (int)($_GET["pax"] ?? 1));
+
+echo '<pre>';
+print_r($_GET);
+echo '</pre>';
+
+echo '<pre>';
+print_r($_GET);
+exit;
+
 $flash = $_SESSION["flash_error"] ?? null;
 unset($_SESSION["flash_error"]);
 
+if ($departure_date < date("Y-m-d")) {
+    $_SESSION["flash_error"] = "Không thể tìm vé cho ngày trong quá khứ.";
+    header("Location: homepage.php");
+    exit;
+}
+
+if ($trip_type === "roundtrip") {
+    if (empty($return_date)) {
+        $_SESSION["flash_error"] = "Vui lòng chọn ngày về cho vé khứ hồi.";
+        header("Location: homepage.php");
+        exit;
+    }
+
+    if ($return_date < $departure_date) {
+        $_SESSION["flash_error"] = "Ngày về phải lớn hơn hoặc bằng ngày đi.";
+        header("Location: homepage.php");
+        exit;
+    }
+}
+
 // Query: danh sách chuyến bay + giá từ + số loại vé
-$sql = "
-SELECT
-  cb.ma_chuyen_bay,
-  hh.ten_hang,
-  cb.so_hieu_chuyen,
-  sbdi.ma_iata AS diem_di,
-  sbden.ma_iata AS diem_den,
-  cb.ngay_gio_cat_canh,
-  cb.ngay_gio_ha_canh,
-  cb.thoi_gian_bay_phut,
-  (
-    SELECT MIN(lv.gia_ve)
-    FROM loai_ve lv
-    WHERE lv.ma_chuyen_bay = cb.ma_chuyen_bay
-  ) AS gia_tu,
-  (
-    SELECT COUNT(*)
-    FROM loai_ve lv
-    WHERE lv.ma_chuyen_bay = cb.ma_chuyen_bay
-  ) AS so_loai_ve
-FROM chuyen_bay cb
-JOIN hang_hang_khong hh ON hh.ma_hang = cb.ma_hang
-JOIN san_bay sbdi ON sbdi.ma_san_bay = cb.san_bay_di
-JOIN san_bay sbden ON sbden.ma_san_bay = cb.san_bay_den
-WHERE sbdi.ma_iata = :from
-  AND sbden.ma_iata = :to
-  AND DATE(cb.ngay_gio_cat_canh) = :date
-ORDER BY gia_tu ASC
-";
-$stmt = db()->prepare($sql);
-$stmt->execute([":from"=>$from, ":to"=>$to, ":date"=>$departure_date ]);
-$flights = $stmt->fetchAll();
+$departure_flights = getFlights($from, $to, $departure_date);
+$return_flights = [];
+if ($trip_type === "roundtrip" && !empty($return_date)) {
+    $return_flights = getFlights($to, $from, $return_date);
+}
 
 function phút_thành_giờ($m){
   $h = intdiv((int)$m, 60);
@@ -83,69 +129,143 @@ function phút_thành_giờ($m){
           <div class="h5 mb-1"><?= htmlspecialchars($from) ?> → <?= htmlspecialchars($to) ?></div>
           <div class="text-muted">Ngày <?= htmlspecialchars($departure_date ) ?> | <?= (int)$pax ?> hành khách</div>
         </div>
-        <a class="btn btn-outline-primary" href="trangchu.php">Đổi tìm kiếm</a>
+        <a class="btn btn-outline-primary" href="homepage.php">Đổi tìm kiếm</a>
       </div>
     </div>
   </div>
 
-  <div class="d-flex gap-2 mb-2">
-    <div class="badge badge-soft p-2">Ưu tiên: Bay thẳng (demo)</div>
-    <div class="badge badge-soft p-2">Sắp xếp: Giá thấp → cao</div>
-  </div>
+  <!-- lặp qua ds chuyến bay để hiện các chuyến -->
 
-  <?php if (!count($flights)): ?>
-    <div class="alert alert-warning">Không tìm thấy chuyến bay phù hợp.</div>
+  <!--cart chiều đi -->
+<h5>Chiều đi: <?= htmlspecialchars($from) ?> → <?= htmlspecialchars($to) ?></h5>
+
+<?php if (!count($departure_flights)): ?>
+  <div class="alert alert-warning">Không tìm thấy chuyến bay phù hợp.</div>
+<?php endif; ?>
+
+<?php foreach ($departure_flights as $f): ?>
+  <div class="card flight-card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between gap-3">
+        <div>
+          <div class="fw-semibold mb-1"><?= htmlspecialchars($f["TENHANG"]) ?></div>
+          <div class="d-flex gap-3 align-items-center flex-wrap">
+            <div>
+              <div class="fw-semibold"><?= htmlspecialchars(date('H:i', strtotime($f["THOIGIANDI"]))) ?></div>
+              <div class="text-muted small"><?= htmlspecialchars($f["diem_di"]) ?></div>
+              <div class="text-muted small"><?= htmlspecialchars($f["ten_san_bay_di"]) ?></div>
+            </div>
+            <div class="text-center">
+              <div class="small text-muted"><?= htmlspecialchars(phút_thành_giờ($f["thoi_gian_bay_phut"])) ?></div>
+            </div>
+            <div>
+              <div class="fw-semibold"><?= htmlspecialchars(date('H:i', strtotime($f["THOIGIANDEN"]))) ?></div>
+              <div class="text-muted small"><?= htmlspecialchars($f["diem_den"]) ?></div>
+              <div class="text-muted small"><?= htmlspecialchars($f["ten_san_bay_den"]) ?></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-end">
+          <div class="text-muted small">Từ</div>
+          <div class="price text-danger">
+            <?= vnd($f["gia_tu"]) ?><span class="text-muted fw-normal">/người</span>
+          </div>
+          <div class="text-muted small"><?= (int)$f["so_loai_ghe"] ?> loại ghế</div>
+          <div class="text-muted small">🪑 Còn <?= (int)$f["tong_so_ghe_trong"] ?> ghế</div>
+          <button
+            class="btn btn-primary mt-2"
+            data-bs-toggle="modal"
+            data-bs-target="#fareModal"
+            data-flight-id="<?= (int)$f["MACHUYENBAY"] ?>"
+            data-flight='<?= htmlspecialchars(json_encode([
+              "ma_chuyen_bay" => (int)$f["MACHUYENBAY"],
+              "ten_hang" => $f["TENHANG"],
+              "diem_di" => $f["diem_di"],
+              "diem_den" => $f["diem_den"],
+              "ten_san_bay_di" => $f["ten_san_bay_di"],
+              "ten_san_bay_den" => $f["ten_san_bay_den"],
+              "gio_di" => date("H:i", strtotime($f["THOIGIANDI"])),
+              "gio_den" => date("H:i", strtotime($f["THOIGIANDEN"])),
+              "thoi_gian_bay_phut" => (int)$f["thoi_gian_bay_phut"],
+              "ngay_di" => $departure_date,
+              "pax" => $pax
+            ], JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>'
+          >
+            Chọn
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endforeach; ?>
+
+
+<!--nếu có chiều về thì hiện cart chiều về-->
+<?php if ($trip_type === "roundtrip"): ?>
+  <h5 class="mt-4">Chiều về: <?= htmlspecialchars($to) ?> → <?= htmlspecialchars($from) ?></h5>
+
+  <?php if (!count($return_flights)): ?>
+    <div class="alert alert-warning">Không có chuyến về</div>
   <?php endif; ?>
 
-  <?php foreach ($flights as $f): ?>
+  <?php foreach ($return_flights as $f): ?>
     <div class="card flight-card shadow-sm mb-3">
       <div class="card-body">
         <div class="d-flex flex-wrap justify-content-between gap-3">
           <div>
-            <div class="fw-semibold mb-1"><?= htmlspecialchars($f["ten_hang"]) ?> • <span class="text-muted"><?= htmlspecialchars($f["so_hieu_chuyen"]) ?></span></div>
+            <div class="fw-semibold mb-1"><?= htmlspecialchars($f["TENHANG"]) ?></div>
             <div class="d-flex gap-3 align-items-center flex-wrap">
               <div>
-                <div class="fw-semibold"><?= htmlspecialchars(substr($f["ngay_gio_cat_canh"],0,5)) ?></div>
+                <div class="fw-semibold"><?= htmlspecialchars(date('H:i', strtotime($f["THOIGIANDI"]))) ?></div>
                 <div class="text-muted small"><?= htmlspecialchars($f["diem_di"]) ?></div>
+                <div class="text-muted small"><?= htmlspecialchars($f["ten_san_bay_di"]) ?></div>
               </div>
               <div class="text-center">
                 <div class="small text-muted"><?= htmlspecialchars(phút_thành_giờ($f["thoi_gian_bay_phut"])) ?></div>
               </div>
               <div>
-                <div class="fw-semibold"><?= htmlspecialchars(substr($f["ngay_gio_ha_canh"],0,5)) ?></div>
+                <div class="fw-semibold"><?= htmlspecialchars(date('H:i', strtotime($f["THOIGIANDEN"]))) ?></div>
                 <div class="text-muted small"><?= htmlspecialchars($f["diem_den"]) ?></div>
+                <div class="text-muted small"><?= htmlspecialchars($f["ten_san_bay_den"]) ?></div>
               </div>
             </div>
           </div>
 
           <div class="text-end">
             <div class="text-muted small">Từ</div>
-            <div class="price text-danger"><?= vnd($f["gia_tu"]) ?><span class="text-muted fw-normal">/người</span></div>
-            <div class="text-muted small"><?= (int)$f["so_loai_ve"] ?> loại vé</div>
-
+            <div class="price text-danger">
+              <?= vnd($f["gia_tu"]) ?><span class="text-muted fw-normal">/người</span>
+            </div>
+            <div class="text-muted small"><?= (int)$f["so_loai_ghe"] ?> loại ghế</div>
+            <div class="text-muted small">🪑 Còn <?= (int)$f["tong_so_ghe_trong"] ?> ghế</div>
             <button
               class="btn btn-primary mt-2"
               data-bs-toggle="modal"
               data-bs-target="#fareModal"
-              data-flight-id="<?= (int)$f["ma_chuyen_bay"] ?>"
+              data-flight-id="<?= (int)$f["MACHUYENBAY"] ?>"
               data-flight='<?= htmlspecialchars(json_encode([
-                "ma_chuyen_bay" => (int)$f["ma_chuyen_bay"],
-                "ten_hang" => $f["ten_hang"],
-                "so_hieu_chuyen" => $f["so_hieu_chuyen"],
+                "ma_chuyen_bay" => (int)$f["MACHUYENBAY"],
+                "ten_hang" => $f["TENHANG"],
                 "diem_di" => $f["diem_di"],
                 "diem_den" => $f["diem_den"],
-                "ngay_gio_cat_canh" => substr($f["ngay_gio_cat_canh"],0,5),
-                "ngay_gio_ha_canh" => substr($f["ngay_gio_ha_canh"],0,5),
+                "ten_san_bay_di" => $f["ten_san_bay_di"],
+                "ten_san_bay_den" => $f["ten_san_bay_den"],
+                "gio_di" => date("H:i", strtotime($f["THOIGIANDI"])),
+                "gio_den" => date("H:i", strtotime($f["THOIGIANDEN"])),
                 "thoi_gian_bay_phut" => (int)$f["thoi_gian_bay_phut"],
-                // "ngay_bay" => $date,
+                "ngay_di" => $return_date,
                 "pax" => $pax
-              ], JSON_UNESCAPED_UNICODE)) ?>'
-            >Chọn</button>
+              ], JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>'
+            >
+              Chọn
+            </button>
           </div>
         </div>
       </div>
     </div>
   <?php endforeach; ?>
+<?php endif; ?>
 
 </div>
 
@@ -184,17 +304,22 @@ fareModal.addEventListener('show.bs.modal', async (event) => {
   const flightId = btn.getAttribute('data-flight-id');
 
   document.getElementById('flightSummary').innerHTML = `
-    <div class="d-flex flex-wrap justify-content-between gap-2">
-      <div>
-        <div class="fw-semibold">${flight.ten_hang} • ${flight.so_hieu_chuyen}</div>
-        <div class="text-muted small">${flight.diem_di} → ${flight.diem_den} | ${flight.ngay_gio_cat_canh} | ${flight.pax} hành khách</div>
+  <div class="d-flex flex-wrap justify-content-between gap-2">
+    <div>
+      <div class="fw-semibold">${flight.ten_hang}</div>
+      <div class="text-muted small">
+        ${flight.diem_di} → ${flight.diem_den} | ${flight.ngay_di} | ${flight.pax} hành khách
       </div>
-      <div class="text-end">
-        <div class="fw-semibold">${flight.gio_cat_canh} → ${flight.gio_ha_canh}</div>
-        <div class="text-muted small">${minutesToHM(flight.thoi_gian_bay_phut)} • Trực tiếp</div>
+      <div class="text-muted small">
+        ${flight.ten_san_bay_di} → ${flight.ten_san_bay_den}
       </div>
     </div>
-  `;
+    <div class="text-end">
+      <div class="fw-semibold">${flight.gio_di} → ${flight.gio_den}</div>
+      <div class="text-muted small">${minutesToHM(flight.thoi_gian_bay_phut)} • Bay thẳng</div>
+    </div>
+  </div>
+`;
 
   const wrap = document.getElementById('fareCards');
   wrap.innerHTML = `<div class="col-12"><div class="alert alert-info">Đang tải loại vé...</div></div>`;
@@ -209,34 +334,33 @@ fareModal.addEventListener('show.bs.modal', async (event) => {
   }
 
   fares.forEach(f => {
-    const col = document.createElement('div');
-    col.className = 'col-12 col-md-6 col-lg-4';
-    col.innerHTML = `
-      <div class="card h-100 shadow-sm" style="border-radius:16px;">
-        <div class="card-body d-flex flex-column">
-          <div class="fw-semibold mb-1">${f.ten_loai_ve}</div>
-          <div class="fs-5 fw-bold text-primary mb-2">${formatVND(f.gia_ve)}<span class="text-muted fw-normal">/người</span></div>
-
-          <ul class="list-unstyled small mb-3">
-            <li>🧳 Xách tay: <b>${f.hanh_ly_xach_tay_kg} kg</b></li>
-            <li>🧳 Ký gửi: <b>${f.hanh_ly_ky_gui_kg} kg</b></li>
-            <li>🔁 Đổi vé: <b>${f.chinh_sach_doi}</b></li>
-            <li>💸 Hoàn vé: <b>${f.chinh_sach_hoan}</b></li>
-            <li>🎟️ Còn chỗ: <b>${f.so_cho_con}</b></li>
-          </ul>
-
-          <form method="post" action="select_fare.php" class="mt-auto">
-            <input type="hidden" name="ma_chuyen_bay" value="${flightId}">
-            <input type="hidden" name="ma_loai_ve" value="${f.ma_loai_ve}">
-            <input type="hidden" name="date" value="${flight.ngay_gio_cat_canh}">
-            <input type="hidden" name="pax" value="${flight.pax}">
-            <button class="btn btn-primary w-100" ${Number(f.so_cho_con) <= 0 ? 'disabled' : ''}>Chọn</button>
-          </form>
+  const col = document.createElement('div');
+  col.className = 'col-12 col-md-6 col-lg-4';
+  col.innerHTML = `
+    <div class="card h-100 shadow-sm" style="border-radius:16px;">
+      <div class="card-body d-flex flex-column">
+        <div class="fw-semibold mb-1">${f.ten_loai_ve}</div>
+        <div class="fs-5 fw-bold text-primary mb-2">
+          ${formatVND(f.gia_ve)}<span class="text-muted fw-normal">/người</span>
         </div>
+
+        <ul class="list-unstyled small mb-3">
+          <li>🎟️ Loại ghế: <b>${f.ten_loai_ve}</b></li>
+          <li>💺 Còn chỗ: <b>${f.so_cho_con}</b></li>
+        </ul>
+
+        <form method="post" action="select_fare.php" class="mt-auto">
+          <input type="hidden" name="ma_chuyen_bay" value="${flightId}">
+          <input type="hidden" name="ma_loai_ve" value="${f.ma_loai_ve}">
+          <input type="hidden" name="date" value="${flight.ngay_di}">
+          <input type="hidden" name="pax" value="${flight.pax}">
+          <button class="btn btn-primary w-100" ${Number(f.so_cho_con) <= 0 ? 'disabled' : ''}>Chọn</button>
+        </form>
       </div>
-    `;
-    wrap.appendChild(col);
-  });
+    </div>
+  `;
+  wrap.appendChild(col);
+});
 });
 </script>
 </body>

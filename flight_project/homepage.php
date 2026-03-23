@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once 'db.php';
+$pdo = db();
 ?>
 
 <!doctype html>
@@ -70,65 +71,72 @@ session_start();
     </header>
     <div class="search-box">
       <div class="trip-type">
-        <div onclick="showSearchBox()">
-          <input type="radio" name="trip" value="return" id="return" checked />
-          <label for="return">Khứ hồi</label>
-        </div>
-        <div onclick="showSearchBox()">
-          <input type="radio" name="trip" value="oneway" id="oneway" />
-          <label for="oneway">Một chiều</label>
-        </div>
-      </div>
-      <form action="flights.php" method="get">
-        <div class="search">
-          <div class="text-box">
-            <span>Từ</span>
-            <input
-              type="text"
-              name="from"
-              placeholder="Nhập tên quốc gia, thành phố"
-              class="searchInput"
-              required
-            />
-            <input type="hidden" name="from" class="iata-value" />
-            <div class="suggestion"></div>
-          </div>
 
-          <div class="text-box">
-            <span>Đến</span>
-            <input
-              type="text"
-              name="to"
-              placeholder="Nhập tên quốc gia, thành phố"
-              class="searchInput"
-              required
-            />
-            <input type="hidden" name="to" class="iata-value" />
-            <div class="suggestion"></div>
-          </div>
-          <div class="text-box" id="departure-date">
-            <span>Ngày đi</span>
-            <input
-              type="date"
-              name="departure-date"
-              id="departure-date-input"
-              required
-            />
-          </div>
-          <div class="text-box" id="return-date">
-            <span>Ngày về</span>
-            <input type="date" name="return-date" id="return-date-input" />
-          </div>
-          <div class="text-box">
-            <span>Số lượng khách</span>
-            <input type="number" name="pax" min="1" value="1" required />
-          </div>
-        </div>
-        <div class="btn-search">
-          <input type="submit" id="btn-search" />
-          <label for="btn-search"><b>Tìm kiếm vé</b></label>
-        </div>
-      </form>
+        <label onclick="showSearchBox()">
+          <input type="radio" name="trip_type" value="oneway" id="oneway" checked />
+          Một chiều
+        </label>
+
+        <label onclick="showSearchBox()">
+          <input type="radio" name="trip_type" value="roundtrip" id="roundtrip" />
+          Khứ hồi
+        </label>
+
+      </div>
+      
+      <form action="flights.php" method="get">
+  <div class="search">
+    
+    <!-- Điểm đi -->
+    <div class="text-box">
+      <span>Từ</span>
+      <input
+        type="text"
+        placeholder="Nhập tên thành phố hoặc sân bay"
+        class="searchInput"
+        required
+      />
+      <input type="hidden" name="from" class="iata-value" />
+      <div class="suggestion"></div>
+    </div>
+
+    <!-- Điểm đến -->
+    <div class="text-box">
+      <span>Đến</span>
+      <input
+        type="text"
+        placeholder="Nhập tên thành phố hoặc sân bay"
+        class="searchInput"
+        required
+      />
+      <input type="hidden" name="to" class="iata-value" />
+      <div class="suggestion"></div>
+    </div>
+
+    <!-- ngày đi -->
+    <div class="text-box">
+      <span>Ngày đi</span>
+      <input type="date" name="departure_date" min="<?= date('Y-m-d') ?>" required />
+    </div>
+
+    <!-- ngày về -->
+    <div class="text-box" id="return-date">
+      <span>Ngày về</span>
+      <input type="date" name="return_date" min="<?= date('Y-m-d') ?>" />
+    </div>
+
+    <!-- Số khách -->
+    <div class="text-box">
+      <span>Số lượng khách</span>
+      <input type="number" name="pax" min="1" value="1" required />
+    </div>
+
+  </div>
+
+  <div class="btn-search">
+    <button type="submit"><b>Tìm kiếm vé</b></button>
+  </div>
+</form>
     </div>
     <div class="why-choose-us">
       <h1 class="title-choose">Vì sao nên chọn CaMeoSky ?</h1>
@@ -333,5 +341,25 @@ session_start();
       </div>
     </footer>
     <script src="js.js"></script>
+
+    <!-- mặc định ẩn ngày về, hiện một chiều trước -->
+     <script>
+      function showSearchBox() {
+        const tripType = document.querySelector('input[name="trip_type"]:checked').value;
+        const returnBox = document.getElementById('return-date');
+        const returnInput = returnBox.querySelector('input[name="return_date"]');
+
+        if (tripType === 'oneway') {
+          returnBox.style.display = 'none';
+          returnInput.value = '';
+          returnInput.removeAttribute('required');
+        } else {
+          returnBox.style.display = 'block';
+          returnInput.setAttribute('required', 'required');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', showSearchBox);
+    </script>
   </body>
 </html>

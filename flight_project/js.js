@@ -1,8 +1,17 @@
 function showSearchBox() {
-  if (document.getElementById("return").checked) {
-    document.getElementById("return-date").style.display = "flex";
+  const roundtrip = document.getElementById("roundtrip");
+  const returnBox = document.getElementById("return-date");
+  const returnInput = returnBox?.querySelector('input[name="return_date"]');
+
+  if (!roundtrip || !returnBox || !returnInput) return;
+
+  if (roundtrip.checked) {
+    returnBox.style.display = "flex";
+    returnInput.setAttribute("required", "required");
   } else {
-    document.getElementById("return-date").style.display = "none";
+    returnBox.style.display = "none";
+    returnInput.value = "";
+    returnInput.removeAttribute("required");
   }
 }
 
@@ -11,19 +20,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const userBtn = document.querySelector(".user-btn");
   const menu = document.querySelector(".dropdown-menu");
 
-  if (!userBtn || !menu) return;
+  if (userBtn && menu) {
+    userBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      menu.classList.toggle("active");
+    });
 
-  userBtn.addEventListener("click", function (e) {
-    e.stopPropagation();
-    menu.classList.toggle("active");
-  });
+    document.addEventListener("click", function (e) {
+      if (!menu.contains(e.target) && !userBtn.contains(e.target)) {
+        menu.classList.remove("active");
+      }
+    });
+  }
 
-  document.addEventListener("click", function (e) {
-    if (!menu.contains(e.target) && !userBtn.contains(e.target)) {
-      menu.classList.remove("active");
-    }
-  });
+  showSearchBox();
 });
+
 // ======================= question-answer =====================
 document.addEventListener("DOMContentLoaded", function () {
   const quesTitle = document.querySelectorAll(".question-title");
@@ -31,47 +43,52 @@ document.addEventListener("DOMContentLoaded", function () {
     title.addEventListener("click", function () {
       const answer = title.nextElementSibling;
       const arrow = title.querySelector(".question-arrow-item");
-      answer.classList.toggle("active");
-      arrow.classList.toggle("active");
+      if (answer) answer.classList.toggle("active");
+      if (arrow) arrow.classList.toggle("active");
     });
   });
 });
+
 // ======================= suggestion-search =====================
 const searchInput = document.querySelectorAll(".searchInput");
 
 searchInput.forEach((input) => {
   const suggestionBox = input.parentElement.querySelector(".suggestion");
+  const hiddenInput = input.parentElement.querySelector(".iata-value");
+
   input.addEventListener("input", function () {
-    let value = input.value.trim();
+    const value = input.value.trim();
     suggestionBox.innerHTML = "";
 
     if (value === "") {
       suggestionBox.style.display = "none";
+      if (hiddenInput) hiddenInput.value = "";
       return;
     }
 
     fetch("searchCity.php?q=" + encodeURIComponent(value))
       .then((response) => response.json())
       .then((data) => {
-        if (data.length === 0) {
+        suggestionBox.innerHTML = "";
+
+        if (!Array.isArray(data) || data.length === 0) {
           suggestionBox.style.display = "none";
           return;
         }
 
         data.forEach((item) => {
-          let div = document.createElement("div");
+          const div = document.createElement("div");
           div.classList.add("suggestion-item");
           div.innerHTML = `
-      <strong>${item.TENDIADIEM} (${item.MADIADIEM})</strong>
-      <div>${item.TENSANBAY}</div>
-      <small>${item.QUOC_GIA}</small>`;
+            <strong>${item.ma_san_bay} - ${item.ten_san_bay}</strong>
+            <div>${item.ten_dia_diem}</div>
+          `;
 
           div.onclick = function () {
-            input.value = item.TENDIADIEM + " (" + item.MADIADIEM + ")";
-            const hiddenInput =
-              input.parentElement.querySelector(".iata-value");
-            hiddenInput.value = item.MADIADIEM;
-
+            input.value = `${item.ma_san_bay} - ${item.ten_san_bay}`;
+            if (hiddenInput) {
+              hiddenInput.value = item.ma_san_bay;
+            }
             suggestionBox.style.display = "none";
           };
 
@@ -79,15 +96,26 @@ searchInput.forEach((input) => {
         });
 
         suggestionBox.style.display = "block";
+      })
+      .catch(() => {
+        suggestionBox.style.display = "none";
       });
   });
-});
-// ======================= date =====================4
-document.addEventListener("DOMContentLoaded", function () {
-  const departureInput = document.querySelector('input[name="departure-date"]');
-  const returnInput = document.querySelector('input[name="return-date"]');
 
-  if (!departureInput || !returnInput) return;
+  input.addEventListener("blur", function () {
+    setTimeout(() => {
+      suggestionBox.style.display = "none";
+    }, 200);
+  });
+});
+
+// ======================= date =====================
+document.addEventListener("DOMContentLoaded", function () {
+  const departureInput = document.querySelector('input[name="departure_date"]');
+  const returnInput = document.querySelector('input[name="return_date"]');
+
+  if (!departureInput) return;
+
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -95,12 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const todayStr = `${yyyy}-${mm}-${dd}`;
 
   departureInput.min = todayStr;
-  returnInput.min = todayStr;
+  if (returnInput) {
+    returnInput.min = todayStr;
+  }
 
   departureInput.addEventListener("change", function () {
-    returnInput.min = departureInput.value;
-    if (returnInput.value < departureInput.value) {
-      returnInput.value = "";
+    if (returnInput) {
+      returnInput.min = departureInput.value;
+      if (returnInput.value && returnInput.value < departureInput.value) {
+        returnInput.value = "";
+      }
     }
   });
 });
